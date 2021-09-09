@@ -4,4 +4,9 @@
         <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MyJetWallet.Sdk.Service" Version="1.5.5" />
+      <PackageReference Include="NEST" Version="7.14.1" />
+    </ItemGroup>
+
 </Project>
