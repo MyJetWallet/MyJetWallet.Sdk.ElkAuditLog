@@ -59,6 +59,34 @@ namespace MyJetWallet.Sdk.ElkAuditLog.Test
 
             result = logger.GetFromTodayIndex(id);
             Console.WriteLine(JsonConvert.SerializeObject(result));
+            
+            
+            
+            
+            // OTHER APP 
+            logger.Init(new LogElkSettings()
+            {
+                Urls = new Dictionary<string, string>()
+                {
+                    {"1", "https://52.166.232.97:9201"},
+                    {"2", "https://52.166.232.97:9202"},
+                    {"3", "https://52.166.232.97:9203"}
+                }, 
+                Password = "yXALKCBr8p4Eq7qj",
+                User = "spot"
+            }, index, "otherApp");
+            
+            // THIRD QUERY
+            var m = new
+            {
+                field5 = "u",
+                field6 = 70
+            };
+            
+            logger.Trace(id, m);
+
+            result = logger.GetFromTodayIndex(id);
+            Console.WriteLine(JsonConvert.SerializeObject(result));
         }
     }
 }
