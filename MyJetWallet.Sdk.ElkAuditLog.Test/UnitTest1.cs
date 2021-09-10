@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using Microsoft.Extensions.Logging;
 using MyJetWallet.Sdk.Service;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -12,11 +14,19 @@ namespace MyJetWallet.Sdk.ElkAuditLog.Test
         public void Test1()
         {
             var logger = new ElkTracer();
-
+            var _loggerFactory =
+                LoggerFactory.Create(builder =>
+                    builder.AddSimpleConsole(options =>
+                    {
+                        options.IncludeScopes = true;
+                        options.SingleLine = true;
+                        options.TimestampFormat = "hh:mm:ss ";
+                    }));
+            var _logger = _loggerFactory.CreateLogger<Tests>();
             
              // INITIALIZE
             var index = "testindex";
-            logger.Init(new LogElkSettings()
+            logger.Init(_logger, new LogElkSettings()
             {
                 Urls = new Dictionary<string, string>()
                 {
@@ -42,6 +52,7 @@ namespace MyJetWallet.Sdk.ElkAuditLog.Test
 
             logger.Trace(id, y);
 
+            Thread.Sleep(2000);
             var result = logger.GetFromTodayIndex(id);
             Console.WriteLine(JsonConvert.SerializeObject(result));
             
@@ -57,6 +68,7 @@ namespace MyJetWallet.Sdk.ElkAuditLog.Test
             
             logger.Trace(id, z, "testPref");
 
+            Thread.Sleep(2000);
             result = logger.GetFromTodayIndex(id);
             Console.WriteLine(JsonConvert.SerializeObject(result));
             
@@ -64,7 +76,7 @@ namespace MyJetWallet.Sdk.ElkAuditLog.Test
             
             
             // OTHER APP 
-            logger.Init(new LogElkSettings()
+            logger.Init(_logger, new LogElkSettings()
             {
                 Urls = new Dictionary<string, string>()
                 {
@@ -85,6 +97,7 @@ namespace MyJetWallet.Sdk.ElkAuditLog.Test
             
             logger.Trace(id, m);
 
+            Thread.Sleep(2000);
             result = logger.GetFromTodayIndex(id);
             Console.WriteLine(JsonConvert.SerializeObject(result));
         }
